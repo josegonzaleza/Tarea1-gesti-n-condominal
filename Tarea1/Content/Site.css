@@ -1,31 +1,200 @@
-﻿/* Move down content because we have a fixed navbar that is 50px tall */
+﻿:root {
+    --bg: #f3f5f7;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --primary: #2563eb;
+    --danger: #dc2626;
+    --ok: #16a34a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
 }
 
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+.navbar {
+    background: #111827;
+    color: #fff;
+    padding: 12px 16px;
 }
 
-/* Set widths on the form inputs since otherwise they're 100% wide */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
-
-
-/* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
-    .jumbotron {
-        margin-top: 20px;
+    .navbar .brand {
+        font-weight: bold;
+        letter-spacing: .2px;
     }
 
-    .body-content {
-        padding: 0;
+    .navbar .links {
+        margin-top: 8px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .navbar a {
+        color: #fff;
+        text-decoration: none;
+        padding: 8px 10px;
+        border-radius: 6px;
+    }
+
+        .navbar a:hover {
+            background: rgba(255,255,255,.12);
+        }
+
+.container {
+    max-width: 1100px;
+    margin: 18px auto;
+    padding: 0 16px;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 14px;
+}
+
+.h1 {
+    font-size: 22px;
+    margin: 0 0 10px 0;
+}
+
+.h2 {
+    font-size: 18px;
+    margin: 0 0 10px 0;
+    color: var(--text);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+@media (max-width: 840px) {
+    .grid {
+        grid-template-columns: 1fr;
     }
 }
+
+.field label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 6px;
+}
+
+.field input, .field select, .field textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    outline: none;
+    background: #fff;
+}
+
+.field textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+    .field input:focus, .field select:focus, .field textarea:focus {
+        border-color: #9ca3af;
+    }
+
+.row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+    .btn:disabled {
+        cursor: not-allowed;
+        opacity: .6;
+    }
+
+.btn-primary {
+    background: var(--primary);
+    color: #fff;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: #fff;
+}
+
+.btn-ghost {
+    background: transparent;
+    border: 1px solid var(--line);
+}
+
+.msg {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    margin-top: 10px;
+}
+
+.msg-error {
+    border-color: #fecaca;
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+.msg-ok {
+    border-color: #bbf7d0;
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+    .table th, .table td {
+        border-bottom: 1px solid var(--line);
+        padding: 10px;
+        text-align: left;
+        vertical-align: top;
+    }
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+}
+
+.small {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.link {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.link:hover { text-decoration: underline; }
