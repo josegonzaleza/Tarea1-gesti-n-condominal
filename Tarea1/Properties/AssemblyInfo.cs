@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // conjunto de atributos. Cambie los valores de estos atributos para modificar la información
 // asociada a un ensamblado.
 [assembly: AssemblyTitle("Tarea1")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Tarea#1 condominios Gonzalez Aguilera Jose Alberto")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("UNED")]
 [assembly: AssemblyProduct("Tarea1")]
 [assembly: AssemblyCopyright("Copyright ©  2026")]
 [assembly: AssemblyTrademark("")]
