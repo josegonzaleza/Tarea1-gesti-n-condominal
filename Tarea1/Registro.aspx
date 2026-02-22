@@ -141,15 +141,29 @@ $(function(){
     });
   }
 
-  function loadUsers(){
-    PageMethods.GetUsers(function(res){
-      if(res && res.ok){
-        renderUsers(res.data || []);
+ function loadUsers() {
+  $.ajax({
+    type: "POST",
+    url: "Registro.aspx/GetUsers",
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    data: "{}",
+    success: function (res) {
+      // En ASP.NET WebForms, el objeto real viene en res.d
+      var r = res.d;
+      if (r && r.ok) {
+        renderUsers(r.data || []);
+      } else {
+        setMessage("msgRegister", (r && r.message) ? r.message : "Error al cargar usuarios.", false);
       }
-    }, function(){
-      
-    });
-  }
+    },
+    error: function (xhr) {
+      // Muestra detalle real
+      setMessage("msgRegister", "Error Ajax GetUsers: " + xhr.status + " " + xhr.statusText, false);
+      console.log(xhr.responseText);
+    }
+  });
+}
 
   $("#idType, #idNumber, #firstName, #lastName, #birthDate, #filialNumber, #hasConstruction, #email, #password, #confirmPassword, #terms")
     .on("input change", validateForm);
@@ -170,36 +184,50 @@ $(function(){
     validateForm();
   });
 
-  $("#btnRegister").on("click", function(){
-    if(!validateForm()){
-      setMessage("msgRegister", "Revise los campos. Hay información inválida o incompleta.", false);
-      return;
-    }
+  $("#btnRegister").on("click", function () {
+  if (!validateForm()) {
+    setMessage("msgRegister", "Revise los campos. Hay información inválida o incompleta.", false);
+    return;
+  }
 
-    var dto = {
-      idType: $("#idType").val(),
-      idNumber: $("#idNumber").val(),
-      firstName: $("#firstName").val(),
-      lastName: $("#lastName").val(),
-      birthDate: $("#birthDate").val(),
-      filialNumber: parseInt($("#filialNumber").val(), 10),
-      hasConstruction: ($("#hasConstruction").val() === "true"),
-      email: $("#email").val(),
-      password: $("#password").val()
-    };
+  var dto = {
+    idType: $("#idType").val(),
+    idNumber: $("#idNumber").val(),
+    firstName: $("#firstName").val(),
+    lastName: $("#lastName").val(),
+    birthDate: $("#birthDate").val(),
+    filialNumber: parseInt($("#filialNumber").val(), 10),
+    hasConstruction: ($("#hasConstruction").val() === "true"),
+    email: $("#email").val(),
+    password: $("#password").val()
+  };
 
-    PageMethods.RegisterUser(dto, function(res){
-      if(res && res.ok){
-        setMessage("msgRegister", res.message, true);
+  registerUser(dto);
+});
+
+    function registerUser(dto) {
+  $.ajax({
+    type: "POST",
+    url: "Registro.aspx/RegisterUser",
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    data: JSON.stringify({ dto: dto }),
+    success: function (res) {
+      var r = res.d;
+      if (r && r.ok) {
+        setMessage("msgRegister", r.message, true);
         loadUsers();
         $("#btnClear").click();
-      }else{
-        setMessage("msgRegister", (res && res.message) ? res.message : "Error al registrar.", false);
+      } else {
+        setMessage("msgRegister", (r && r.message) ? r.message : "Error al registrar.", false);
       }
-    }, function(){
-      setMessage("msgRegister", "Error de comunicación Ajax.", false);
-    });
+    },
+    error: function (xhr) {
+      setMessage("msgRegister", "Error Ajax RegisterUser: " + xhr.status + " " + xhr.statusText, false);
+      console.log(xhr.responseText);
+    }
   });
+}
 
   //Inicializo usuarios y formulario
   validateForm();
