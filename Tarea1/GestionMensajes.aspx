@@ -38,7 +38,7 @@
       </div>
 
       <div class="field">
-        <label>Fin de publicación (cierre)</label>
+        <label>Fin de publicación</label>
         <input id="publishEnd" type="datetime-local" />
       </div>
     </div>
@@ -98,8 +98,7 @@
   <div class="card">
     <div class="row" style="justify-content:space-between;">
       <div>
-        <div class="h2">Listado (se oculta al llegar fecha cierre)</div>
-        <div class="small">Filtra por tipo si lo deseas.</div>
+        <div class="h2">Listado</div>
       </div>
       <div class="field" style="min-width:240px;">
         <label>Filtro tipo</label>
@@ -324,7 +323,7 @@ $(function(){
       if(res && res.ok){
         setMessage("msgAdmin", res.message, true);
         loadActivities();
-        // no reseteo automático para permitir seguir editando si quería
+        
       }else{
         setMessage("msgAdmin", (res && res.message) ? res.message : "Error al guardar.", false);
       }
