@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\Jose2\\source\\repos\\Tarea1\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|c:\\users\\jose2\\source\\repos\\tarea1\\tarea1\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|solutionrelative:tarea1\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|c:\\users\\jose2\\source\\repos\\tarea1\\tarea1\\registro.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|solutionrelative:tarea1\\registro.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|c:\\users\\jose2\\source\\repos\\tarea1\\tarea1\\registro.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
@@ -15,8 +15,12 @@
       "RelativeMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|solutionrelative:tarea1\\scripts\\app.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|c:\\users\\jose2\\source\\repos\\tarea1\\tarea1\\registro.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|solutionrelative:tarea1\\registro.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|c:\\users\\jose2\\source\\repos\\tarea1\\tarea1\\actividades.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|solutionrelative:tarea1\\actividades.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|c:\\users\\jose2\\source\\repos\\tarea1\\tarea1\\gestionmensajes.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|solutionrelative:tarea1\\gestionmensajes.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,27 +35,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Web.config",
-              "DocumentMoniker": "C:\\Users\\Jose2\\source\\repos\\Tarea1\\Tarea1\\Web.config",
-              "RelativeDocumentMoniker": "Tarea1\\Web.config",
-              "ToolTip": "C:\\Users\\Jose2\\source\\repos\\Tarea1\\Tarea1\\Web.config",
-              "RelativeToolTip": "Tarea1\\Web.config",
-              "ViewState": "AgIAAB8AAAAAAAAAAAAmwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2026-02-22T18:17:15.998Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "Registro.aspx.cs",
               "DocumentMoniker": "C:\\Users\\Jose2\\source\\repos\\Tarea1\\Tarea1\\Registro.aspx.cs",
               "RelativeDocumentMoniker": "Tarea1\\Registro.aspx.cs",
               "ToolTip": "C:\\Users\\Jose2\\source\\repos\\Tarea1\\Tarea1\\Registro.aspx.cs",
               "RelativeToolTip": "Tarea1\\Registro.aspx.cs",
-              "ViewState": "AgIAAFQAAAAAAAAAAAAAAFQAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-22T18:14:57.564Z",
+              "WhenOpened": "2026-02-22T21:23:19.586Z",
               "EditorCaption": ""
             },
             {
@@ -62,9 +53,35 @@
               "RelativeDocumentMoniker": "Tarea1\\Scripts\\app.js",
               "ToolTip": "C:\\Users\\Jose2\\source\\repos\\Tarea1\\Tarea1\\Scripts\\app.js",
               "RelativeToolTip": "Tarea1\\Scripts\\app.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACIAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-02-22T18:05:51.451Z",
+              "WhenOpened": "2026-02-22T21:21:39.293Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Actividades.aspx",
+              "DocumentMoniker": "C:\\Users\\Jose2\\source\\repos\\Tarea1\\Tarea1\\Actividades.aspx",
+              "RelativeDocumentMoniker": "Tarea1\\Actividades.aspx",
+              "ToolTip": "C:\\Users\\Jose2\\source\\repos\\Tarea1\\Tarea1\\Actividades.aspx",
+              "RelativeToolTip": "Tarea1\\Actividades.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2026-02-22T21:21:26.378Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GestionMensajes.aspx",
+              "DocumentMoniker": "C:\\Users\\Jose2\\source\\repos\\Tarea1\\Tarea1\\GestionMensajes.aspx",
+              "RelativeDocumentMoniker": "Tarea1\\GestionMensajes.aspx",
+              "ToolTip": "C:\\Users\\Jose2\\source\\repos\\Tarea1\\Tarea1\\GestionMensajes.aspx",
+              "RelativeToolTip": "Tarea1\\GestionMensajes.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2026-02-22T21:21:20.454Z",
               "EditorCaption": ""
             },
             {
@@ -77,7 +94,7 @@
               "RelativeToolTip": "Tarea1\\Registro.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2026-02-22T17:58:56.929Z",
+              "WhenOpened": "2026-02-22T21:21:07.155Z",
               "EditorCaption": ""
             }
           ]

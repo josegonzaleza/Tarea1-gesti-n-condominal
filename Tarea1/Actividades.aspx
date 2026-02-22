@@ -46,14 +46,14 @@ $(function(){
   function loadBoard(){
     var filter = parseInt($("#typeFilter").val(), 10);
 
-    PageMethods.UserGetBoard(filter, function(res){
-      if(!res || !res.ok){
-        setMessage("msgUser", (res && res.message) ? res.message : "Error al cargar actividades.", false);
+    PageMethods.UserGetBoard(filter, function(r){
+      if(!r || !r.ok){
+        setMessage("msgUser", (r && r.message) ? r.message : "Error al cargar actividades.", false);
         return;
       }
       clearMessage("msgUser");
 
-      var list = res.data || [];
+      var list = r.data || [];
       var $tbody = $("#tblUserActivities tbody");
       $tbody.empty();
 
@@ -69,6 +69,9 @@ $(function(){
 
         $tbody.append(tr);
       });
+    }, function(err){
+      setMessage("msgUser", "Error Ajax UserGetBoard: " + (err && err.get_message ? err.get_message() : "Comunicación"), false);
+      console && console.log(err);
     });
   }
 

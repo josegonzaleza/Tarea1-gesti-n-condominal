@@ -49,5 +49,5 @@ C:\Users\Jose2\source\repos\Tarea1\Tarea1\bin\es\Microsoft.AspNet.FriendlyUrls.r
 C:\Users\Jose2\source\repos\Tarea1\Tarea1\obj\Debug\Tarea1.csproj.CoreCompileInputs.cache
 C:\Users\Jose2\source\repos\Tarea1\Tarea1\obj\Debug\Tarea1.dll
 C:\Users\Jose2\source\repos\Tarea1\Tarea1\obj\Debug\Tarea1.pdb
-C:\Users\Jose2\source\repos\Tarea1\Tarea1\obj\Debug\Tarea1.csprojAssemblyReference.cache
-C:\Users\Jose2\source\repos\Tarea1\Tarea1\obj\Debug\Tarea1.csproj.CopyComplete
+C:\Users\Jose2\source\repos\Tarea1\Tarea1\obj\Debug\Tarea1.csproj.AssemblyReference.cache
+C:\Users\Jose2\source\repos\Tarea1\Tarea1\obj\Debug\Tarea1.csproj.Up2Date

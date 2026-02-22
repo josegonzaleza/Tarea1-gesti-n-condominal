@@ -1,0 +1,341 @@
+﻿<%@ Page Title="Gestión" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="GestionMensajes.aspx.cs" Inherits="Tarea1.GestionMensajes" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+
+  <div class="card">
+    <div class="h1">Gestión de mensajes / actividades</div>
+
+    <div class="grid" style="margin-top:10px;">
+      <div class="field">
+        <label>Tipo</label>
+        <select id="activityType">
+          <option value="1">Reunión</option>
+          <option value="2">Actividad social</option>
+          <option value="3">Recordatorio</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Título</label>
+        <input id="title" type="text" />
+      </div>
+
+      <div class="field">
+        <label>Destinatarios</label>
+        <select id="audience">
+          <option value="all">Todos</option>
+          <option value="filial">Por filial</option>
+        </select>
+      </div>
+
+      <div class="field" id="filialBox" style="display:none;">
+        <label>Número de filial</label>
+        <input id="filialNumber" type="number" min="0" />
+      </div>
+
+      <div class="field">
+        <label>Inicio de publicación</label>
+        <input id="publishStart" type="datetime-local" />
+      </div>
+
+      <div class="field">
+        <label>Fin de publicación</label>
+        <input id="publishEnd" type="datetime-local" />
+      </div>
+    </div>
+
+    <!-- Panel Reunión -->
+    <div class="card" style="margin-top:12px;" id="panelMeeting">
+      <div class="h2">Campos de reunión</div>
+      <div class="grid">
+        <div class="field">
+          <label>URL (virtual)</label>
+          <input id="meetingUrl" type="url" />
+        </div>
+        <div class="field">
+          <label>Agenda</label>
+          <textarea id="meetingAgenda"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Social -->
+    <div class="card" style="margin-top:12px; display:none;" id="panelSocial">
+      <div class="h2">Campos de actividad social</div>
+      <div class="grid">
+        <div class="field">
+          <label>Lugar</label>
+          <input id="place" type="text" />
+        </div>
+        <div class="field">
+          <label>Fecha del evento</label>
+          <input id="eventDate" type="date" />
+        </div>
+        <div class="field" style="grid-column:1/-1;">
+          <label>Requisitos</label>
+          <textarea id="requirements"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel Recordatorio -->
+    <div class="card" style="margin-top:12px; display:none;" id="panelReminder">
+      <div class="h2">Campos de recordatorio</div>
+      <div class="field">
+        <label>Texto</label>
+        <textarea id="reminderText"></textarea>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:12px;">
+      <button id="btnSave" type="button" class="btn btn-primary">Guardar</button>
+      <button id="btnReset" type="button" class="btn btn-ghost">Nuevo</button>
+      <input type="hidden" id="activityId" value="" />
+    </div>
+
+    <div id="msgAdmin" class="msg" style="display:none;"></div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;">
+      <div>
+        <div class="h2">Listado</div>
+      </div>
+      <div class="field" style="min-width:240px;">
+        <label>Filtro tipo</label>
+        <select id="typeFilter">
+          <option value="0">Todos</option>
+          <option value="1">Reunión</option>
+          <option value="2">Actividad social</option>
+          <option value="3">Recordatorio</option>
+        </select>
+      </div>
+    </div>
+
+    <table class="table" id="tblActivities">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Tipo</th>
+          <th>Publicación</th>
+          <th>Destinatarios</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+<script>
+$(function(){
+
+  function switchPanels(){
+    clearMessage("msgAdmin");
+    var t = parseInt($("#activityType").val(), 10);
+    $("#panelMeeting").toggle(t === 1);
+    $("#panelSocial").toggle(t === 2);
+    $("#panelReminder").toggle(t === 3);
+  }
+
+  function switchAudience(){
+    var v = $("#audience").val();
+    $("#filialBox").toggle(v === "filial");
+  }
+
+  function isValidUrl(url){
+    if(isEmpty(url)) return false;
+    try { new URL(url); return true; } catch(e){ return false; }
+  }
+
+  function validateAdminForm(){
+    var t = parseInt($("#activityType").val(), 10);
+    var title = $("#title").val();
+    var publishStart = $("#publishStart").val();
+    var publishEnd = $("#publishEnd").val();
+    var audience = $("#audience").val();
+    var filialNumber = $("#filialNumber").val();
+
+    if(isEmpty(title)) return "Título requerido.";
+    if(isEmpty(publishStart) || isEmpty(publishEnd)) return "Fechas de publicación requeridas.";
+
+    if(new Date(publishStart) >= new Date(publishEnd)) return "La fecha de inicio debe ser menor que la fecha de fin.";
+
+    if(audience === "filial" && isEmpty(filialNumber)) return "Filial requerida si seleccionas 'Por filial'.";
+
+    if(t === 1){
+      if(!isValidUrl($("#meetingUrl").val())) return "URL de reunión inválida.";
+      if(isEmpty($("#meetingAgenda").val())) return "Agenda requerida para reunión.";
+    }
+    if(t === 2){
+      if(isEmpty($("#place").val())) return "Lugar requerido para actividad social.";
+      if(isEmpty($("#eventDate").val())) return "Fecha del evento requerida para actividad social.";
+      if(isEmpty($("#requirements").val())) return "Requisitos requeridos para actividad social.";
+    }
+    if(t === 3){
+      if(isEmpty($("#reminderText").val())) return "Texto requerido para recordatorio.";
+    }
+
+    return "";
+  }
+
+  function resetForm(){
+    $("#activityId").val("");
+    $("#activityType").val("1");
+    $("#title").val("");
+    $("#audience").val("all");
+    $("#filialNumber").val("");
+
+    var now = new Date();
+    var later = new Date(now.getTime() + 60*60*1000);
+    $("#publishStart").val(toLocalIsoMinute(now));
+    $("#publishEnd").val(toLocalIsoMinute(later));
+
+    $("#meetingUrl").val("");
+    $("#meetingAgenda").val("");
+
+    $("#place").val("");
+    $("#eventDate").val("");
+    $("#requirements").val("");
+
+    $("#reminderText").val("");
+
+    switchAudience();
+    switchPanels();
+    clearMessage("msgAdmin");
+  }
+
+  function renderType(t){
+    if(t === 1) return "Reunión";
+    if(t === 2) return "Social";
+    return "Recordatorio";
+  }
+
+  function renderAudience(a){
+    if(a.forAll) return "Todos";
+    return "Filial " + a.filialNumber;
+  }
+
+  function loadActivities(){
+    var filter = parseInt($("#typeFilter").val(), 10);
+
+    PageMethods.AdminGetActivities(filter, function(res){
+      if(!res || !res.ok) return;
+
+      var list = res.data || [];
+      var $tbody = $("#tblActivities tbody");
+      $tbody.empty();
+
+      list.forEach(function(a){
+        var tr = $("<tr/>");
+        tr.append($("<td/>").text(a.title));
+        tr.append($("<td/>").html('<span class="badge">'+renderType(a.activityType)+'</span>'));
+        tr.append($("<td/>").text(a.publishStart + " → " + a.publishEnd));
+        tr.append($("<td/>").text(renderAudience(a)));
+
+        var actions = $('<td/>');
+        var btnEdit = $('<button type="button" class="btn btn-ghost">Editar</button>').on("click", function(){
+          PageMethods.AdminGetActivityById(a.activityId, function(r2){
+            if(!r2 || !r2.ok) return;
+            fillForm(r2.data);
+          });
+        });
+
+        var btnDel = $('<button type="button" class="btn btn-danger">Eliminar</button>').on("click", function(){
+          if(!confirm("¿Eliminar actividad? (solo permitido si aún no inicia publicación)")) return;
+          PageMethods.AdminDeleteActivity(a.activityId, function(r3){
+            if(r3 && r3.ok){
+              setMessage("msgAdmin", r3.message, true);
+              loadActivities();
+            }else{
+              setMessage("msgAdmin", (r3 && r3.message) ? r3.message : "No se pudo eliminar.", false);
+            }
+          });
+        });
+
+        actions.append(btnEdit).append(" ").append(btnDel);
+        tr.append(actions);
+        $tbody.append(tr);
+      });
+
+    });
+  }
+
+  function fillForm(a){
+    $("#activityId").val(a.activityId);
+    $("#activityType").val(String(a.activityType));
+    $("#title").val(a.title);
+
+    $("#audience").val(a.forAll ? "all" : "filial");
+    $("#filialNumber").val(a.filialNumber || "");
+
+    $("#publishStart").val(a.publishStartLocal);
+    $("#publishEnd").val(a.publishEndLocal);
+
+    $("#meetingUrl").val(a.meetingUrl || "");
+    $("#meetingAgenda").val(a.meetingAgenda || "");
+
+    $("#place").val(a.place || "");
+    $("#eventDate").val(a.eventDate || "");
+    $("#requirements").val(a.requirements || "");
+
+    $("#reminderText").val(a.reminderText || "");
+
+    switchAudience();
+    switchPanels();
+    clearMessage("msgAdmin");
+  }
+
+  $("#activityType").on("change", switchPanels);
+  $("#audience").on("change", switchAudience);
+  $("#typeFilter").on("change", loadActivities);
+
+  $("#btnReset").on("click", function(){ resetForm(); });
+
+  $("#btnSave").on("click", function(){
+    clearMessage("msgAdmin");
+
+    var err = validateAdminForm();
+    if(!isEmpty(err)){
+      setMessage("msgAdmin", err, false);
+      return;
+    }
+
+    var audience = $("#audience").val();
+    var dto = {
+      activityId: $("#activityId").val(),
+      activityType: parseInt($("#activityType").val(), 10),
+      title: $("#title").val(),
+      forAll: (audience === "all"),
+      filialNumber: (audience === "filial") ? parseInt($("#filialNumber").val(),10) : null,
+      publishStart: $("#publishStart").val(),
+      publishEnd: $("#publishEnd").val(),
+
+      meetingUrl: $("#meetingUrl").val(),
+      meetingAgenda: $("#meetingAgenda").val(),
+
+      place: $("#place").val(),
+      eventDate: $("#eventDate").val(),
+      requirements: $("#requirements").val(),
+
+      reminderText: $("#reminderText").val()
+    };
+
+    PageMethods.AdminSaveActivity(dto, function(res){
+      if(res && res.ok){
+        setMessage("msgAdmin", res.message, true);
+        loadActivities();
+        
+      }else{
+        setMessage("msgAdmin", (res && res.message) ? res.message : "Error al guardar.", false);
+      }
+    }, function(){
+      setMessage("msgAdmin", "Error de comunicación (Ajax).", false);
+    });
+  });
+
+  // inicializar
+  resetForm();
+  loadActivities();
+});
+</script>
+
+</asp:Content>

@@ -35,6 +35,9 @@ namespace Tarea1
 
             if (string.IsNullOrWhiteSpace(idType)) { ShowError("Tipo de identificación es requerido."); return; }
             if (string.IsNullOrWhiteSpace(idNumber)) { ShowError("Identificación es requerida."); return; }
+            // validar que la identificación tenga al menos 9 dígitos
+            var idDigits = new string(idNumber.Where(char.IsDigit).ToArray());
+            if (idDigits.Length < 9) { ShowError("La identificación debe tener al menos 9 dígitos."); return; }
             if (string.IsNullOrWhiteSpace(firstName)) { ShowError("Nombre es requerido."); return; }
             if (string.IsNullOrWhiteSpace(lastName)) { ShowError("Apellidos son requeridos."); return; }
             if (!SecurityHelper.IsValidEmail(email)) { ShowError("Correo inválido."); return; }
