@@ -1,238 +1,146 @@
-﻿<%@ Page Title="Registro" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Registro.aspx.cs" Inherits="Tarea1.Registro" %>
+﻿<%@ Page Title="Registro" Language="C#" MasterPageFile="~/Site.Master"
+    AutoEventWireup="true" CodeBehind="Registro.aspx.cs" Inherits="Tarea1.Registro" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
     <div class="card">
-        <div class="h1">Registro de usuario</div>
+        <div class="h1">Registro</div>
 
-        <div class="grid">
-            <div class="field">
-                <label>Tipo de identificación</label>
-                <select id="idType">
-                    <option value="">Seleccione...</option>
-                    <option value="Fisica">Física</option>
-                    <option value="Dimex">DIMEX</option>
-                    <option value="Pasaporte">Pasaporte</option>
-                </select>
-            </div>
+        <asp:UpdatePanel ID="upRegistro" runat="server" UpdateMode="Conditional">
+            <ContentTemplate>
 
-            <div class="field">
-                <label>Identificación</label>
-                <input id="idNumber" type="text" />
-            </div>
+                <asp:Panel ID="pnlMsg" runat="server" CssClass="msg" Visible="false">
+                    <asp:Label ID="lblMsg" runat="server" />
+                </asp:Panel>
 
-            <div class="field">
-                <label>Nombre</label>
-                <input id="firstName" type="text" />
-            </div>
+                <div class="grid">
 
-            <div class="field">
-                <label>Apellidos</label>
-                <input id="lastName" type="text" />
-            </div>
+                    <div class="field">
+                        <label>Tipo identificación</label>
+                        <asp:DropDownList ID="ddlIdType" runat="server">
+                            <asp:ListItem Value="">Seleccione...</asp:ListItem>
+                            <asp:ListItem Value="Fisica">Física</asp:ListItem>
+                            <asp:ListItem Value="Dimex">DIMEX</asp:ListItem>
+                            <asp:ListItem Value="Pasaporte">Pasaporte</asp:ListItem>
+                        </asp:DropDownList>
+                    </div>
 
-            <div class="field">
-                <label>Fecha de nacimiento</label>
-                <input id="birthDate" type="date" />
-            </div>
+                    <div class="field">
+                        <label>Identificación</label>
+                        <asp:TextBox ID="txtIdNumber" runat="server" />
+                    </div>
 
-            <div class="field">
-                <label>Número de filial</label>
-                <input id="filialNumber" type="number" min="0" />
-            </div>
+                    <div class="field">
+                        <label>Nombre</label>
+                        <asp:TextBox ID="txtFirstName" runat="server" />
+                    </div>
 
-            <div class="field">
-                <label>Tiene construcción</label>
-                <select id="hasConstruction">
-                    <option value="true">Sí</option>
-                    <option value="false">No</option>
-                </select>
-            </div>
+                    <div class="field">
+                        <label>Apellidos</label>
+                        <asp:TextBox ID="txtLastName" runat="server" />
+                    </div>
 
-            <div class="field">
-                <label>Correo (usuario)</label>
-                <input id="email" type="email" />
-            </div>
+                    <div class="field">
+                        <label>Fecha nacimiento</label>
+                        <asp:TextBox ID="txtBirthDate" runat="server" TextMode="Date" />
+                    </div>
 
-            <div class="field">
-                <label>Contraseña</label>
-                <input id="password" type="password" />
-            </div>
+                    <div class="field">
+                        <label>Número filial</label>
+                        <asp:TextBox ID="txtFilialNumber" runat="server" TextMode="Number" />
+                    </div>
 
-            <div class="field">
-                <label>Confirmar contraseña</label>
-                <input id="confirmPassword" type="password" />
-            </div>
-        </div>
+                    <div class="field">
+                        <label>Tiene construcción</label>
+                        <asp:DropDownList ID="ddlHasConstruction" runat="server">
+                            <asp:ListItem Value="true">Sí</asp:ListItem>
+                            <asp:ListItem Value="false">No</asp:ListItem>
+                        </asp:DropDownList>
+                    </div>
 
-        <div class="row" style="margin-top:10px;">
-            <label class="small">
-                <input id="terms" type="checkbox" />
-                Acepto términos y condiciones
-            </label>
-        </div>
+                    <div class="field">
+                        <label>Correo</label>
+                        <asp:TextBox ID="txtEmail" runat="server" TextMode="Email" />
+                    </div>
 
-        <div class="row" style="margin-top:12px;">
-            <button id="btnRegister" class="btn btn-primary" type="button" disabled>Registrar</button>
-            <button id="btnClear" class="btn btn-ghost" type="button">Limpiar</button>
-        </div>
+                    <div class="field">
+                        <label>Contraseña</label>
+                        <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" />
+                    </div>
 
-        <div id="msgRegister" class="msg" style="display:none;"></div>
+                    <div class="field">
+                        <label>Confirmar</label>
+                        <asp:TextBox ID="txtConfirm" runat="server" TextMode="Password" />
+                    </div>
+
+                </div>
+
+                <div class="row" style="margin-top:10px;">
+                    <asp:CheckBox ID="chkTerms" runat="server" Text=" Acepto términos y condiciones" />
+                </div>
+
+                <div class="row" style="margin-top:12px;">
+                    <asp:Button ID="btnRegister" runat="server" Text="Registrar"
+                        CssClass="btn btn-primary" OnClick="btnRegister_Click" />
+                    <asp:Button ID="btnClear" runat="server" Text="Limpiar"
+                        CssClass="btn btn-ghost" OnClick="btnClear_Click" CausesValidation="false" />
+                </div>
+
+            </ContentTemplate>
+
+            <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="btnRegister" EventName="Click" />
+                <asp:AsyncPostBackTrigger ControlID="btnClear" EventName="Click" />
+            </Triggers>
+        </asp:UpdatePanel>
     </div>
 
     <div class="card">
-        <div class="h2">Usuarios registrados</div>
-        <table class="table" id="tblUsers">
-            <thead>
-                <tr>
-                    <th>Correo</th>
-                    <th>Nombre</th>
-                    <th>Filial</th>
-                    <th>Rol</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div class="h2">Usuarios</div>
+
+        <asp:UpdatePanel ID="upUsers" runat="server" UpdateMode="Conditional">
+            <ContentTemplate>
+                <asp:GridView ID="gvUsers" runat="server" CssClass="table" AutoGenerateColumns="false">
+                    <Columns>
+                        <asp:BoundField HeaderText="Correo" DataField="email" />
+                        <asp:BoundField HeaderText="Nombre" DataField="fullName" />
+                        <asp:BoundField HeaderText="Filial" DataField="filialNumber" />
+                        <asp:BoundField HeaderText="Rol" DataField="role" />
+                    </Columns>
+                </asp:GridView>
+            </ContentTemplate>
+        </asp:UpdatePanel>
     </div>
 
-<script>
-$(function(){
+    <!-- Validación cliente simple (no depende de WebMethods) -->
+    <script>
+      (function(){
+        function isEmpty(v){ return !v || String(v).trim()===""; }
+        function isValidEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(String(v||"").trim()); }
 
-  function validateForm(){
-    clearMessage("msgRegister");
+        function validateForm(){
+          var idType = document.getElementById("<%= ddlIdType.ClientID %>").value;
+          var idNumber = document.getElementById("<%= txtIdNumber.ClientID %>").value;
+          var firstName = document.getElementById("<%= txtFirstName.ClientID %>").value;
+          var lastName = document.getElementById("<%= txtLastName.ClientID %>").value;
+          var birthDate = document.getElementById("<%= txtBirthDate.ClientID %>").value;
+          var filial = document.getElementById("<%= txtFilialNumber.ClientID %>").value;
+          var email = document.getElementById("<%= txtEmail.ClientID %>").value;
+          var pass = document.getElementById("<%= txtPassword.ClientID %>").value;
+          var conf = document.getElementById("<%= txtConfirm.ClientID %>").value;
+          var terms = document.getElementById("<%= chkTerms.ClientID %>").checked;
 
-    var idType = $("#idType").val();
-    var idNumber = $("#idNumber").val();
-    var firstName = $("#firstName").val();
-    var lastName = $("#lastName").val();
-    var birthDate = $("#birthDate").val();
-    var filialNumber = $("#filialNumber").val();
-    var email = $("#email").val();
-    var password = $("#password").val();
-    var confirmPassword = $("#confirmPassword").val();
-    var terms = $("#terms").is(":checked");
+          var ok = !isEmpty(idType) && !isEmpty(idNumber) && !isEmpty(firstName) && !isEmpty(lastName) &&
+                   !isEmpty(birthDate) && !isEmpty(filial) && isValidEmail(email) &&
+                   !isEmpty(pass) && pass.length >= 6 && pass === conf && terms;
 
-    var ok =
-      !isEmpty(idType) &&
-      !isEmpty(idNumber) &&
-      !isEmpty(firstName) &&
-      !isEmpty(lastName) &&
-      !isEmpty(birthDate) &&
-      !isEmpty(filialNumber) &&
-      isValidEmail(email) &&
-      !isEmpty(password) &&
-      password === confirmPassword &&
-      terms;
+          document.getElementById("<%= btnRegister.ClientID %>").disabled = !ok;
+        }
 
-    $("#btnRegister").prop("disabled", !ok);
-    return ok;
-  }
-
-  function renderUsers(users){
-    var $tbody = $("#tblUsers tbody");
-    $tbody.empty();
-
-    users.forEach(function(u){
-      var tr = $("<tr/>");
-      tr.append($("<td/>").text(u.email));
-      tr.append($("<td/>").text(u.firstName + " " + u.lastName));
-      tr.append($("<td/>").text(u.filialNumber));
-      tr.append($("<td/>").text(u.role));
-      $tbody.append(tr);
-    });
-  }
-
- function loadUsers() {
-  $.ajax({
-    type: "POST",
-    url: "Registro.aspx/GetUsers",
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: "{}",
-    success: function (res) {
-      // En ASP.NET WebForms, el objeto real viene en res.d
-      var r = res.d;
-      if (r && r.ok) {
-        renderUsers(r.data || []);
-      } else {
-        setMessage("msgRegister", (r && r.message) ? r.message : "Error al cargar usuarios.", false);
-      }
-    },
-    error: function (xhr) {
-      // Muestra detalle real
-      setMessage("msgRegister", "Error Ajax GetUsers: " + xhr.status + " " + xhr.statusText, false);
-      console.log(xhr.responseText);
-    }
-  });
-}
-
-  $("#idType, #idNumber, #firstName, #lastName, #birthDate, #filialNumber, #hasConstruction, #email, #password, #confirmPassword, #terms")
-    .on("input change", validateForm);
-
-  $("#btnClear").on("click", function(){
-    $("#idType").val("");
-    $("#idNumber").val("");
-    $("#firstName").val("");
-    $("#lastName").val("");
-    $("#birthDate").val("");
-    $("#filialNumber").val("");
-    $("#hasConstruction").val("true");
-    $("#email").val("");
-    $("#password").val("");
-    $("#confirmPassword").val("");
-    $("#terms").prop("checked", false);
-    clearMessage("msgRegister");
-    validateForm();
-  });
-
-  $("#btnRegister").on("click", function () {
-  if (!validateForm()) {
-    setMessage("msgRegister", "Revise los campos. Hay información inválida o incompleta.", false);
-    return;
-  }
-
-  var dto = {
-    idType: $("#idType").val(),
-    idNumber: $("#idNumber").val(),
-    firstName: $("#firstName").val(),
-    lastName: $("#lastName").val(),
-    birthDate: $("#birthDate").val(),
-    filialNumber: parseInt($("#filialNumber").val(), 10),
-    hasConstruction: ($("#hasConstruction").val() === "true"),
-    email: $("#email").val(),
-    password: $("#password").val()
-  };
-
-  registerUser(dto);
-});
-
-    function registerUser(dto) {
-  $.ajax({
-    type: "POST",
-    url: "Registro.aspx/RegisterUser",
-    contentType: "application/json; charset=utf-8",
-    dataType: "json",
-    data: JSON.stringify({ dto: dto }),
-    success: function (res) {
-      var r = res.d;
-      if (r && r.ok) {
-        setMessage("msgRegister", r.message, true);
-        loadUsers();
-        $("#btnClear").click();
-      } else {
-        setMessage("msgRegister", (r && r.message) ? r.message : "Error al registrar.", false);
-      }
-    },
-    error: function (xhr) {
-      setMessage("msgRegister", "Error Ajax RegisterUser: " + xhr.status + " " + xhr.statusText, false);
-      console.log(xhr.responseText);
-    }
-  });
-}
-
-  //Inicializo usuarios y formulario
-  validateForm();
-  loadUsers();
-});
-</script>
+        document.addEventListener("input", validateForm, true);
+        document.addEventListener("change", validateForm, true);
+        validateForm();
+      })();
+    </script>
 
 </asp:Content>
