@@ -36,7 +36,7 @@ namespace Tarea1
                 return;
             }
 
-            // control: condómino solo ve lo suyo
+  
             if (user.role == UserRole.Condominio)
             {
                 bool allowed = activity.forAll ||

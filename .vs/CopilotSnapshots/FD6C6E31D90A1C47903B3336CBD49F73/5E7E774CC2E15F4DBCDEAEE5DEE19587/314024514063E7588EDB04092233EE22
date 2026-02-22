@@ -44,4 +44,14 @@
     </compilers>
   </system.codedom>
 
+  <!-- Ensure anonymous authentication is allowed for AJAX page method calls when running under IIS/IIS Express -->
+  <system.webServer>
+    <security>
+      <authentication>
+        <anonymousAuthentication enabled="true" />
+        <windowsAuthentication enabled="false" />
+      </authentication>
+    </security>
+  </system.webServer>
+
 </configuration>

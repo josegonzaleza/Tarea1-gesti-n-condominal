@@ -1,0 +1,97 @@
+﻿<%@ Page Title="Registro" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Registro.aspx.cs" Inherits="Tarea1.Registro" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+
+    <div class="card">
+        <div class="h1">Registro de usuario</div>
+
+        <div class="grid">
+            <div class="field">
+                <label>Tipo de identificación</label>
+                <select id="idType">
+                    <option value="">Seleccione...</option>
+                    <option value="Fisica">Física</option>
+                    <option value="Dimex">DIMEX</option>
+                    <option value="Pasaporte">Pasaporte</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Identificación</label>
+                <input id="idNumber" type="text" />
+            </div>
+
+            <div class="field">
+                <label>Nombre</label>
+                <input id="firstName" type="text" />
+            </div>
+
+            <div class="field">
+                <label>Apellidos</label>
+                <input id="lastName" type="text" />
+            </div>
+
+            <div class="field">
+                <label>Fecha de nacimiento</label>
+                <input id="birthDate" type="date" />
+            </div>
+
+            <div class="field">
+                <label>Número de filial</label>
+                <input id="filialNumber" type="number" min="0" />
+            </div>
+
+            <div class="field">
+                <label>Tiene construcción</label>
+                <select id="hasConstruction">
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Correo (usuario)</label>
+                <input id="email" type="email" />
+            </div>
+
+            <div class="field">
+                <label>Contraseña</label>
+                <input id="password" type="password" />
+            </div>
+
+            <div class="field">
+                <label>Confirmar contraseña</label>
+                <input id="confirmPassword" type="password" />
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+            <label class="small">
+                <input id="terms" type="checkbox" />
+                Acepto términos y condiciones
+            </label>
+        </div>
+
+        <div class="row" style="margin-top:12px;">
+            <button id="btnRegister" class="btn btn-primary" type="button" disabled>Registrar</button>
+            <button id="btnClear" class="btn btn-ghost" type="button">Limpiar</button>
+        </div>
+
+        <div id="msgRegister" class="msg" style="display:none;"></div>
+    </div>
+
+    <div class="card">
+        <div class="h2">Usuarios registrados</div>
+        <table class="table" id="tblUsers">
+            <thead>
+                <tr>
+                    <th>Correo</th>
+                    <th>Nombre</th>
+                    <th>Filial</th>
+                    <th>Rol</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+</asp:Content>
