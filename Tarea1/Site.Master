@@ -22,7 +22,7 @@
                 <a runat="server" id="lnkPrincipal" href="~/Principal.aspx" visible="false">Principal</a>
                 <a runat="server" id="lnkGestion" href="~/GestionMensajes.aspx" visible="false">Gestión de mensajes</a>
                 <a runat="server" id="lnkActividades" href="~/Actividades.aspx" visible="false">Actividades</a>
-                <asp:LinkButton ID="btnLogout" runat="server" CssClass="link"  Visible="false">Cerrar sesión</asp:LinkButton>
+                <asp:LinkButton ID="btnLogout" runat="server" CssClass="link" OnClick="btnLogout_Click"  Visible="false">Cerrar sesión</asp:LinkButton>
             </div>
         </div>
 
