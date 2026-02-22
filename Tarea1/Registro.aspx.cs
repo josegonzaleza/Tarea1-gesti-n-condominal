@@ -14,6 +14,7 @@ namespace Tarea1
     public partial class Registro : Page
     {
         protected void Page_Load(object sender, EventArgs e) { }
+
         [WebMethod]
         [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
         public static ApiResponse GetUsers()
