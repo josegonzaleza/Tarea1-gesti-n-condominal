@@ -15,7 +15,7 @@
     </div>
 
     <div class="row" style="margin-top:12px;">
-      <asp:Button ID="btnLogin" runat="server" Text="Autenticar" CssClass="btn btn-primary"  />
+      <asp:Button ID="btnLogin" runat="server" Text="Autenticar" CssClass="btn btn-primary" OnClick="btnLogin_Click" />
       <a class="btn btn-ghost" href="Registro.aspx">Registrarse</a>
     </div>
 
