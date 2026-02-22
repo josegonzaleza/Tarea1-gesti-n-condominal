@@ -11,7 +11,7 @@ using static Tarea1.AppCode.Models;
 
 namespace Tarea1
 {
-    public partial class Actividades : System.Web.UI.Page
+    public partial class Actividades : Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -38,8 +38,8 @@ namespace Tarea1
         {
             DataStore.EnsureSeed();
 
-            // obtener usuario de sesión (en WebMethod: HttpContext.Current.Session)
-            var user = System.Web.HttpContext.Current.Session["currentUser"] as User;
+            // obtener usuario de sesión
+            var user = HttpContext.Current.Session["currentUser"] as User;
             if (user == null) return ApiResponse.Fail("Sesión expirada. Vuelve a iniciar sesión.");
 
             var now = DateTime.Now;

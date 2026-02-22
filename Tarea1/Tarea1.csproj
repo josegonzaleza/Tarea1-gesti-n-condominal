@@ -105,6 +105,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ActividadDetalle.aspx" />
     <Content Include="Actividades.aspx" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -168,6 +169,13 @@
     <Content Include="Site.Mobile.Master" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActividadDetalle.aspx.cs">
+      <DependentUpon>ActividadDetalle.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ActividadDetalle.aspx.designer.cs">
+      <DependentUpon>ActividadDetalle.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Actividades.aspx.cs">
       <DependentUpon>Actividades.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
