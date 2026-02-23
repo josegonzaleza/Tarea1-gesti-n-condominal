@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using Tarea1.AppCode;
 
 namespace Tarea1
@@ -22,7 +18,7 @@ namespace Tarea1
             var email = (txtEmail.Text ?? "").Trim().ToLowerInvariant();
             var password = txtPassword.Text ?? "";
 
-            if (!SecurityHelper.IsValidEmail(email))
+            if (!SecurityHelper.IsValidEmail(email) || string.IsNullOrWhiteSpace(password))
             {
                 ShowError("El usuario y/o la contraseña son inválidos, intente de nuevo");
                 return;
