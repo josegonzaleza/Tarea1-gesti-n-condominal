@@ -1,341 +1,259 @@
-﻿<%@ Page Title="Gestión" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="GestionMensajes.aspx.cs" Inherits="Tarea1.GestionMensajes" %>
+﻿<%@ Page Title="Gestión" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"
+    CodeBehind="GestionMensajes.aspx.cs" Inherits="Tarea1.GestionMensajes" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
   <div class="card">
     <div class="h1">Gestión de mensajes / actividades</div>
 
-    <div class="grid" style="margin-top:10px;">
-      <div class="field">
-        <label>Tipo</label>
-        <select id="activityType">
-          <option value="1">Reunión</option>
-          <option value="2">Actividad social</option>
-          <option value="3">Recordatorio</option>
-        </select>
-      </div>
+    <!-- Mensaje inmediato para el cliente -->
+    <div id="clientMsg" class="msg msg-error" style="display:none;"></div>
 
-      <div class="field">
-        <label>Título</label>
-        <input id="title" type="text" />
-      </div>
+    <asp:UpdatePanel ID="upForm" runat="server" UpdateMode="Conditional">
+      <ContentTemplate>
 
-      <div class="field">
-        <label>Destinatarios</label>
-        <select id="audience">
-          <option value="all">Todos</option>
-          <option value="filial">Por filial</option>
-        </select>
-      </div>
+        <asp:HiddenField ID="hfActivityId" runat="server" />
 
-      <div class="field" id="filialBox" style="display:none;">
-        <label>Número de filial</label>
-        <input id="filialNumber" type="number" min="0" />
-      </div>
+        <!-- Mensaje servidor -->
+        <asp:Panel ID="pnlMsg" runat="server" CssClass="msg" Visible="false">
+          <asp:Label ID="lblMsg" runat="server" />
+        </asp:Panel>
 
-      <div class="field">
-        <label>Inicio de publicación</label>
-        <input id="publishStart" type="datetime-local" />
-      </div>
+        <div class="grid" style="margin-top:10px;">
 
-      <div class="field">
-        <label>Fin de publicación</label>
-        <input id="publishEnd" type="datetime-local" />
-      </div>
-    </div>
+          <div class="field">
+            <label>Tipo</label>
+            <asp:DropDownList ID="ddlActivityType" runat="server" AutoPostBack="true"
+                OnSelectedIndexChanged="ddlActivityType_SelectedIndexChanged">
+              <asp:ListItem Value="1">Reunión</asp:ListItem>
+              <asp:ListItem Value="2">Actividad social</asp:ListItem>
+              <asp:ListItem Value="3">Recordatorio</asp:ListItem>
+            </asp:DropDownList>
+          </div>
 
-    <!-- Panel Reunión -->
-    <div class="card" style="margin-top:12px;" id="panelMeeting">
-      <div class="h2">Campos de reunión</div>
-      <div class="grid">
-        <div class="field">
-          <label>URL (virtual)</label>
-          <input id="meetingUrl" type="url" />
+          <div class="field">
+            <label>Título</label>
+            <asp:TextBox ID="txtTitle" runat="server" />
+          </div>
+
+          <div class="field">
+            <label>Destinatarios</label>
+            <asp:DropDownList ID="ddlAudience" runat="server" AutoPostBack="true"
+                OnSelectedIndexChanged="ddlAudience_SelectedIndexChanged">
+              <asp:ListItem Value="all">Todos</asp:ListItem>
+              <asp:ListItem Value="filial">Por filial</asp:ListItem>
+            </asp:DropDownList>
+          </div>
+
+          <div class="field">
+            <label>Número de filial</label>
+            <asp:TextBox ID="txtFilialNumber" runat="server" TextMode="Number" />
+          </div>
+
+          <div class="field">
+            <label>Inicio de publicación</label>
+            <asp:TextBox ID="txtPublishStart" runat="server" TextMode="DateTimeLocal" />
+          </div>
+
+          <div class="field">
+            <label>Fin de publicación</label>
+            <asp:TextBox ID="txtPublishEnd" runat="server" TextMode="DateTimeLocal" />
+          </div>
+
         </div>
-        <div class="field">
-          <label>Agenda</label>
-          <textarea id="meetingAgenda"></textarea>
-        </div>
-      </div>
-    </div>
 
-    <!-- Panel Social -->
-    <div class="card" style="margin-top:12px; display:none;" id="panelSocial">
-      <div class="h2">Campos de actividad social</div>
-      <div class="grid">
-        <div class="field">
-          <label>Lugar</label>
-          <input id="place" type="text" />
-        </div>
-        <div class="field">
-          <label>Fecha del evento</label>
-          <input id="eventDate" type="date" />
-        </div>
-        <div class="field" style="grid-column:1/-1;">
-          <label>Requisitos</label>
-          <textarea id="requirements"></textarea>
-        </div>
-      </div>
-    </div>
+        <!-- Panel Reunión -->
+        <asp:Panel ID="pnlMeeting" runat="server" CssClass="card" Style="margin-top:12px;">
+          <div class="h2">Campos de reunión</div>
+          <div class="grid">
+            <div class="field">
+              <label>URL (virtual) (opcional)</label>
+              <asp:TextBox ID="txtMeetingUrl" runat="server" />
+            </div>
+            <div class="field">
+              <label>Agenda</label>
+              <asp:TextBox ID="txtMeetingAgenda" runat="server" TextMode="MultiLine" />
+            </div>
+          </div>
+        </asp:Panel>
 
-    <!-- Panel Recordatorio -->
-    <div class="card" style="margin-top:12px; display:none;" id="panelReminder">
-      <div class="h2">Campos de recordatorio</div>
-      <div class="field">
-        <label>Texto</label>
-        <textarea id="reminderText"></textarea>
-      </div>
-    </div>
+        <!-- Panel Social -->
+        <asp:Panel ID="pnlSocial" runat="server" CssClass="card" Style="margin-top:12px;" Visible="false">
+          <div class="h2">Campos de actividad social</div>
+          <div class="grid">
+            <div class="field">
+              <label>Lugar</label>
+              <asp:TextBox ID="txtPlace" runat="server" />
+            </div>
+            <div class="field">
+              <label>Fecha del evento</label>
+              <asp:TextBox ID="txtEventDate" runat="server" TextMode="Date" />
+            </div>
+            <div class="field" style="grid-column:1/-1;">
+              <label>Requisitos</label>
+              <asp:TextBox ID="txtRequirements" runat="server" TextMode="MultiLine" />
+            </div>
+          </div>
+        </asp:Panel>
 
-    <div class="row" style="margin-top:12px;">
-      <button id="btnSave" type="button" class="btn btn-primary">Guardar</button>
-      <button id="btnReset" type="button" class="btn btn-ghost">Nuevo</button>
-      <input type="hidden" id="activityId" value="" />
-    </div>
+        <!-- Panel Recordatorio -->
+        <asp:Panel ID="pnlReminder" runat="server" CssClass="card" Style="margin-top:12px;" Visible="false">
+          <div class="h2">Campos de recordatorio</div>
+          <div class="field">
+            <label>Texto</label>
+            <asp:TextBox ID="txtReminderText" runat="server" TextMode="MultiLine" />
+          </div>
+        </asp:Panel>
 
-    <div id="msgAdmin" class="msg" style="display:none;"></div>
+        <div class="row" style="margin-top:12px;">
+          <asp:Button ID="btnSave" runat="server" Text="Guardar" CssClass="btn btn-primary" OnClick="btnSave_Click" />
+          <asp:Button ID="btnReset" runat="server" Text="Nuevo" CssClass="btn btn-ghost" OnClick="btnReset_Click" CausesValidation="false" />
+        </div>
+
+      </ContentTemplate>
+
+      <Triggers>
+        <asp:AsyncPostBackTrigger ControlID="ddlActivityType" EventName="SelectedIndexChanged" />
+        <asp:AsyncPostBackTrigger ControlID="ddlAudience" EventName="SelectedIndexChanged" />
+        <asp:AsyncPostBackTrigger ControlID="btnSave" EventName="Click" />
+        <asp:AsyncPostBackTrigger ControlID="btnReset" EventName="Click" />
+      </Triggers>
+    </asp:UpdatePanel>
   </div>
 
   <div class="card">
     <div class="row" style="justify-content:space-between;">
       <div>
         <div class="h2">Listado</div>
+        <div class="small">Editar: solo si aún no inició publicación. Eliminar: solo si no ha vencido.</div>
       </div>
+
       <div class="field" style="min-width:240px;">
         <label>Filtro tipo</label>
-        <select id="typeFilter">
-          <option value="0">Todos</option>
-          <option value="1">Reunión</option>
-          <option value="2">Actividad social</option>
-          <option value="3">Recordatorio</option>
-        </select>
+        <asp:DropDownList ID="ddlTypeFilter" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlTypeFilter_SelectedIndexChanged">
+          <asp:ListItem Value="0">Todos</asp:ListItem>
+          <asp:ListItem Value="1">Reunión</asp:ListItem>
+          <asp:ListItem Value="2">Actividad social</asp:ListItem>
+          <asp:ListItem Value="3">Recordatorio</asp:ListItem>
+        </asp:DropDownList>
       </div>
     </div>
 
-    <table class="table" id="tblActivities">
-      <thead>
-        <tr>
-          <th>Título</th>
-          <th>Tipo</th>
-          <th>Publicación</th>
-          <th>Destinatarios</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <asp:UpdatePanel ID="upGrid" runat="server" UpdateMode="Conditional">
+      <ContentTemplate>
+        <asp:GridView ID="gvActivities" runat="server" CssClass="table" AutoGenerateColumns="false"
+            OnRowCommand="gvActivities_RowCommand">
+          <Columns>
+            <asp:BoundField HeaderText="Título" DataField="title" />
+            <asp:BoundField HeaderText="Tipo" DataField="typeText" />
+            <asp:BoundField HeaderText="Publicación" DataField="publishRange" />
+            <asp:BoundField HeaderText="Destinatarios" DataField="audienceText" />
+
+            <asp:TemplateField HeaderText="Acciones">
+              <ItemTemplate>
+                <asp:LinkButton ID="lnkEdit" runat="server" CssClass="link"
+                    CommandName="editItem" CommandArgument='<%# Eval("activityId") %>'>Editar</asp:LinkButton>
+                &nbsp;|&nbsp;
+                <asp:LinkButton ID="lnkDelete" runat="server" CssClass="link"
+                    CommandName="deleteItem" CommandArgument='<%# Eval("activityId") %>'
+                    OnClientClick="return confirm('¿Eliminar actividad?');">Eliminar</asp:LinkButton>
+              </ItemTemplate>
+            </asp:TemplateField>
+
+          </Columns>
+        </asp:GridView>
+      </ContentTemplate>
+      <Triggers>
+        <asp:AsyncPostBackTrigger ControlID="ddlTypeFilter" EventName="SelectedIndexChanged" />
+      </Triggers>
+    </asp:UpdatePanel>
   </div>
 
-<script>
-$(function(){
+  <script>
+      (function () {
+          function isEmpty(v) { return !v || String(v).trim() === ""; }
+          function toInt(v) { var n = parseInt(v, 10); return isNaN(n) ? null : n; }
+          function isValidUrl(u) {
+              if (isEmpty(u)) return true;
+              try { var x = new URL(u); return x.protocol === "http:" || x.protocol === "https:"; }
+              catch (e) { return false; }
+          }
 
-  function switchPanels(){
-    clearMessage("msgAdmin");
-    var t = parseInt($("#activityType").val(), 10);
-    $("#panelMeeting").toggle(t === 1);
-    $("#panelSocial").toggle(t === 2);
-    $("#panelReminder").toggle(t === 3);
-  }
+          var typeEl = document.getElementById("<%= ddlActivityType.ClientID %>");
+        var titleEl = document.getElementById("<%= txtTitle.ClientID %>");
+        var audEl = document.getElementById("<%= ddlAudience.ClientID %>");
+        var filialEl = document.getElementById("<%= txtFilialNumber.ClientID %>");
+        var psEl = document.getElementById("<%= txtPublishStart.ClientID %>");
+        var peEl = document.getElementById("<%= txtPublishEnd.ClientID %>");
+      var btnEl = document.getElementById("<%= btnSave.ClientID %>");
+      var msgEl = document.getElementById("clientMsg");
 
-  function switchAudience(){
-    var v = $("#audience").val();
-    $("#filialBox").toggle(v === "filial");
-  }
+      var meetUrlEl = document.getElementById("<%= txtMeetingUrl.ClientID %>");
+      var meetAgEl = document.getElementById("<%= txtMeetingAgenda.ClientID %>");
 
-  function isValidUrl(url){
-    if(isEmpty(url)) return false;
-    try { new URL(url); return true; } catch(e){ return false; }
-  }
+      var placeEl = document.getElementById("<%= txtPlace.ClientID %>");
+      var eventDateEl = document.getElementById("<%= txtEventDate.ClientID %>");
+      var reqEl = document.getElementById("<%= txtRequirements.ClientID %>");
 
-  function validateAdminForm(){
-    var t = parseInt($("#activityType").val(), 10);
-    var title = $("#title").val();
-    var publishStart = $("#publishStart").val();
-    var publishEnd = $("#publishEnd").val();
-    var audience = $("#audience").val();
-    var filialNumber = $("#filialNumber").val();
+      var remEl = document.getElementById("<%= txtReminderText.ClientID %>");
 
-    if(isEmpty(title)) return "Título requerido.";
-    if(isEmpty(publishStart) || isEmpty(publishEnd)) return "Fechas de publicación requeridas.";
+          function show(msg) {
+              if (!msg) { msgEl.style.display = "none"; msgEl.textContent = ""; }
+              else { msgEl.style.display = "block"; msgEl.textContent = msg; }
+          }
 
-    if(new Date(publishStart) >= new Date(publishEnd)) return "La fecha de inicio debe ser menor que la fecha de fin.";
+          function validate(showMsg) {
+              var t = typeEl.value;
+              var title = titleEl.value;
+              var aud = audEl.value;
+              var filial = filialEl.value;
+              var ps = psEl.value;
+              var pe = peEl.value;
 
-    if(audience === "filial" && isEmpty(filialNumber)) return "Filial requerida si seleccionas 'Por filial'.";
+              var msg = "";
 
-    if(t === 1){
-      if(!isValidUrl($("#meetingUrl").val())) return "URL de reunión inválida.";
-      if(isEmpty($("#meetingAgenda").val())) return "Agenda requerida para reunión.";
-    }
-    if(t === 2){
-      if(isEmpty($("#place").val())) return "Lugar requerido para actividad social.";
-      if(isEmpty($("#eventDate").val())) return "Fecha del evento requerida para actividad social.";
-      if(isEmpty($("#requirements").val())) return "Requisitos requeridos para actividad social.";
-    }
-    if(t === 3){
-      if(isEmpty($("#reminderText").val())) return "Texto requerido para recordatorio.";
-    }
+              if (isEmpty(title)) msg = "Título requerido.";
+              else if (isEmpty(ps) || isEmpty(pe)) msg = "Fechas de publicación requeridas.";
+              else if (ps >= pe) msg = "La fecha de inicio debe ser menor que la fecha de fin.";
+              else if (aud === "filial") {
+                  var f = toInt(filial);
+                  if (f === null || f < 0) msg = "Filial requerida (número válido) si seleccionas 'Por filial'.";
+              }
 
-    return "";
-  }
+              if (!msg) {
+                  if (t === "1") {
+                      if (!isValidUrl(meetUrlEl.value)) msg = "URL de reunión inválida (http/https).";
+                      else if (isEmpty(meetAgEl.value)) msg = "Agenda requerida para reunión.";
+                  } else if (t === "2") {
+                      if (isEmpty(placeEl.value)) msg = "Lugar requerido para actividad social.";
+                      else if (isEmpty(eventDateEl.value)) msg = "Fecha del evento requerida para actividad social.";
+                      else if (isEmpty(reqEl.value)) msg = "Requisitos requeridos para actividad social.";
+                  } else {
+                      if (isEmpty(remEl.value)) msg = "Texto requerido para recordatorio.";
+                  }
+              }
 
-  function resetForm(){
-    $("#activityId").val("");
-    $("#activityType").val("1");
-    $("#title").val("");
-    $("#audience").val("all");
-    $("#filialNumber").val("");
+              btnEl.disabled = !!msg;
+              if (showMsg) show(msg);
+              else if (!msg) show("");
 
-    var now = new Date();
-    var later = new Date(now.getTime() + 60*60*1000);
-    $("#publishStart").val(toLocalIsoMinute(now));
-    $("#publishEnd").val(toLocalIsoMinute(later));
+              return !msg;
+          }
 
-    $("#meetingUrl").val("");
-    $("#meetingAgenda").val("");
+          document.addEventListener("input", function () { validate(true); }, true);
+          document.addEventListener("change", function () { validate(true); }, true);
 
-    $("#place").val("");
-    $("#eventDate").val("");
-    $("#requirements").val("");
-
-    $("#reminderText").val("");
-
-    switchAudience();
-    switchPanels();
-    clearMessage("msgAdmin");
-  }
-
-  function renderType(t){
-    if(t === 1) return "Reunión";
-    if(t === 2) return "Social";
-    return "Recordatorio";
-  }
-
-  function renderAudience(a){
-    if(a.forAll) return "Todos";
-    return "Filial " + a.filialNumber;
-  }
-
-  function loadActivities(){
-    var filter = parseInt($("#typeFilter").val(), 10);
-
-    PageMethods.AdminGetActivities(filter, function(res){
-      if(!res || !res.ok) return;
-
-      var list = res.data || [];
-      var $tbody = $("#tblActivities tbody");
-      $tbody.empty();
-
-      list.forEach(function(a){
-        var tr = $("<tr/>");
-        tr.append($("<td/>").text(a.title));
-        tr.append($("<td/>").html('<span class="badge">'+renderType(a.activityType)+'</span>'));
-        tr.append($("<td/>").text(a.publishStart + " → " + a.publishEnd));
-        tr.append($("<td/>").text(renderAudience(a)));
-
-        var actions = $('<td/>');
-        var btnEdit = $('<button type="button" class="btn btn-ghost">Editar</button>').on("click", function(){
-          PageMethods.AdminGetActivityById(a.activityId, function(r2){
-            if(!r2 || !r2.ok) return;
-            fillForm(r2.data);
+          btnEl.addEventListener("click", function (e) {
+              if (!validate(true)) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  return false;
+              }
+              return true;
           });
-        });
 
-        var btnDel = $('<button type="button" class="btn btn-danger">Eliminar</button>').on("click", function(){
-          if(!confirm("¿Eliminar actividad? (solo permitido si aún no inicia publicación)")) return;
-          PageMethods.AdminDeleteActivity(a.activityId, function(r3){
-            if(r3 && r3.ok){
-              setMessage("msgAdmin", r3.message, true);
-              loadActivities();
-            }else{
-              setMessage("msgAdmin", (r3 && r3.message) ? r3.message : "No se pudo eliminar.", false);
-            }
-          });
-        });
-
-        actions.append(btnEdit).append(" ").append(btnDel);
-        tr.append(actions);
-        $tbody.append(tr);
-      });
-
-    });
-  }
-
-  function fillForm(a){
-    $("#activityId").val(a.activityId);
-    $("#activityType").val(String(a.activityType));
-    $("#title").val(a.title);
-
-    $("#audience").val(a.forAll ? "all" : "filial");
-    $("#filialNumber").val(a.filialNumber || "");
-
-    $("#publishStart").val(a.publishStartLocal);
-    $("#publishEnd").val(a.publishEndLocal);
-
-    $("#meetingUrl").val(a.meetingUrl || "");
-    $("#meetingAgenda").val(a.meetingAgenda || "");
-
-    $("#place").val(a.place || "");
-    $("#eventDate").val(a.eventDate || "");
-    $("#requirements").val(a.requirements || "");
-
-    $("#reminderText").val(a.reminderText || "");
-
-    switchAudience();
-    switchPanels();
-    clearMessage("msgAdmin");
-  }
-
-  $("#activityType").on("change", switchPanels);
-  $("#audience").on("change", switchAudience);
-  $("#typeFilter").on("change", loadActivities);
-
-  $("#btnReset").on("click", function(){ resetForm(); });
-
-  $("#btnSave").on("click", function(){
-    clearMessage("msgAdmin");
-
-    var err = validateAdminForm();
-    if(!isEmpty(err)){
-      setMessage("msgAdmin", err, false);
-      return;
-    }
-
-    var audience = $("#audience").val();
-    var dto = {
-      activityId: $("#activityId").val(),
-      activityType: parseInt($("#activityType").val(), 10),
-      title: $("#title").val(),
-      forAll: (audience === "all"),
-      filialNumber: (audience === "filial") ? parseInt($("#filialNumber").val(),10) : null,
-      publishStart: $("#publishStart").val(),
-      publishEnd: $("#publishEnd").val(),
-
-      meetingUrl: $("#meetingUrl").val(),
-      meetingAgenda: $("#meetingAgenda").val(),
-
-      place: $("#place").val(),
-      eventDate: $("#eventDate").val(),
-      requirements: $("#requirements").val(),
-
-      reminderText: $("#reminderText").val()
-    };
-
-    PageMethods.AdminSaveActivity(dto, function(res){
-      if(res && res.ok){
-        setMessage("msgAdmin", res.message, true);
-        loadActivities();
-        
-      }else{
-        setMessage("msgAdmin", (res && res.message) ? res.message : "Error al guardar.", false);
-      }
-    }, function(){
-      setMessage("msgAdmin", "Error de comunicación (Ajax).", false);
-    });
-  });
-
-  // inicializar
-  resetForm();
-  loadActivities();
-});
-</script>
+          validate(false);
+      })();
+  </script>
 
 </asp:Content>

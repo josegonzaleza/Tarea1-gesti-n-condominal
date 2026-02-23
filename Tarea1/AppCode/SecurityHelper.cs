@@ -21,7 +21,16 @@ namespace Tarea1.AppCode
             }
         }
 
-        
+        public static bool IsValidUrl(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+                return false;
+
+            Uri uri;
+            return Uri.TryCreate(url, UriKind.Absolute, out uri)
+                   && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
+        }
+
         public static bool IsValidEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email)) return false;
