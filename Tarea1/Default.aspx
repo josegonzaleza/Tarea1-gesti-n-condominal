@@ -47,9 +47,6 @@
     <div class="card" style="padding:12px; margin-top:12px;">
       <div class="h2">Acceso de prueba</div>
       <div class="small" style="margin-top:6px;">
-        <b>Admin:</b> admin@condominio.com &nbsp;|&nbsp; <b>Clave:</b> Admin123!
-      </div>
-      <div class="small" style="margin-top:6px;">
         Si eres condómino, debes registrarte con tu número de filial para ver actividades dirigidas a tu filial.
       </div>
     </div>

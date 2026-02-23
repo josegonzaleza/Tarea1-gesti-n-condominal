@@ -6,7 +6,6 @@
   <div class="card">
     <div class="h1">Gestión de mensajes / actividades</div>
 
-    <!-- Mensaje inmediato para el cliente -->
     <div id="clientMsg" class="msg msg-error" style="display:none;"></div>
 
     <asp:UpdatePanel ID="upForm" runat="server" UpdateMode="Conditional">
@@ -14,7 +13,6 @@
 
         <asp:HiddenField ID="hfActivityId" runat="server" />
 
-        <!-- Mensaje servidor -->
         <asp:Panel ID="pnlMsg" runat="server" CssClass="msg" Visible="false">
           <asp:Label ID="lblMsg" runat="server" />
         </asp:Panel>
@@ -62,7 +60,6 @@
 
         </div>
 
-        <!-- Panel Reunión -->
         <asp:Panel ID="pnlMeeting" runat="server" CssClass="card" Style="margin-top:12px;">
           <div class="h2">Campos de reunión</div>
           <div class="grid">
@@ -77,7 +74,6 @@
           </div>
         </asp:Panel>
 
-        <!-- Panel Social -->
         <asp:Panel ID="pnlSocial" runat="server" CssClass="card" Style="margin-top:12px;" Visible="false">
           <div class="h2">Campos de actividad social</div>
           <div class="grid">
@@ -96,7 +92,6 @@
           </div>
         </asp:Panel>
 
-        <!-- Panel Recordatorio -->
         <asp:Panel ID="pnlReminder" runat="server" CssClass="card" Style="margin-top:12px;" Visible="false">
           <div class="h2">Campos de recordatorio</div>
           <div class="field">

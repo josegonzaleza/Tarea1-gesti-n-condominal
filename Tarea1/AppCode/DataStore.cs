@@ -13,7 +13,7 @@ namespace Tarea1.AppCode
         public static List<User> users = new List<User>();
         public static List<Activity> activities = new List<Activity>();
 
-        // inicializa un admin por defecto (solo una vez)
+        // inicializa un admin por defecto
         public static void EnsureSeed()
         {
             lock (locker)

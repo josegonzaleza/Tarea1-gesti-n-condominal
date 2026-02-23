@@ -30,9 +30,7 @@
           <asp:Label ID="lblMsg" runat="server" />
         </asp:Panel>
 
-        <p class="small" style="margin-top:10px;">
-          Admin de prueba: <b>admin@condominio.com</b> / <b>Admin123!</b>
-        </p>
+        
 
       </ContentTemplate>
 

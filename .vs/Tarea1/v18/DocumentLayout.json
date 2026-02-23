@@ -7,19 +7,19 @@
       "RelativeMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|solutionrelative:tarea1\\registro.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|c:\\users\\jose2\\source\\repos\\tarea1\\tarea1\\registro.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "AbsoluteMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|C:\\Users\\Jose2\\source\\repos\\Tarea1\\tarea1\\registro.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
       "RelativeMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|solutionrelative:tarea1\\registro.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|c:\\users\\jose2\\source\\repos\\tarea1\\tarea1\\scripts\\app.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "AbsoluteMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|C:\\Users\\Jose2\\source\\repos\\Tarea1\\tarea1\\scripts\\app.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|solutionrelative:tarea1\\scripts\\app.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|c:\\users\\jose2\\source\\repos\\tarea1\\tarea1\\actividades.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "AbsoluteMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|C:\\Users\\Jose2\\source\\repos\\Tarea1\\tarea1\\actividades.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
       "RelativeMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|solutionrelative:tarea1\\actividades.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|c:\\users\\jose2\\source\\repos\\tarea1\\tarea1\\gestionmensajes.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "AbsoluteMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|C:\\Users\\Jose2\\source\\repos\\Tarea1\\tarea1\\gestionmensajes.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
       "RelativeMoniker": "D:0:0:{A353A2C3-3AD6-41A0-A2C5-343463FD7E05}|Tarea1\\Tarea1.csproj|solutionrelative:tarea1\\gestionmensajes.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     }
   ],
@@ -55,8 +55,7 @@
               "RelativeToolTip": "Tarea1\\Scripts\\app.js",
               "ViewState": "AgIAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-02-22T21:21:39.293Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-22T21:21:39.293Z"
             },
             {
               "$type": "Document",
@@ -68,8 +67,7 @@
               "RelativeToolTip": "Tarea1\\Actividades.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2026-02-22T21:21:26.378Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-22T21:21:26.378Z"
             },
             {
               "$type": "Document",
@@ -81,8 +79,7 @@
               "RelativeToolTip": "Tarea1\\GestionMensajes.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2026-02-22T21:21:20.454Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-22T21:21:20.454Z"
             },
             {
               "$type": "Document",
@@ -94,8 +91,7 @@
               "RelativeToolTip": "Tarea1\\Registro.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2026-02-22T21:21:07.155Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-22T21:21:07.155Z"
             }
           ]
         }
