@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using Tarea1.AppCode;
 using static Tarea1.AppCode.Models;
 
@@ -21,69 +18,110 @@ namespace Tarea1
                 Response.Redirect("~/Login.aspx");
                 return;
             }
+            if (user.role != UserRole.Condominio)
+            {
+                Response.Redirect("~/Principal.aspx");
+                return;
+            }
+
+            if (!IsPostBack)
+            {
+                LoadDetail(user);
+            }
+        }
+
+        private void LoadDetail(User user)
+        {
+            pnlError.Visible = false;
+            pnlDetail.Visible = false;
 
             var id = (Request.QueryString["id"] ?? "").Trim();
             if (string.IsNullOrWhiteSpace(id))
             {
-                ShowError("No se envió el id de la actividad.");
+                ShowError("No se recibió el identificador de la actividad (id).");
                 return;
             }
 
-            var activity = DataStore.FindActivityById(id);
-            if (activity == null)
+            var a = DataStore.FindActivityById(id);
+            if (a == null)
             {
-                ShowError("Actividad no encontrada o ya no está publicada.");
+                ShowError("La actividad no existe o fue eliminada.");
                 return;
             }
 
-  
-            if (user.role == UserRole.Condominio)
+            if (DateTime.Now > a.publishEnd)
             {
-                bool allowed = activity.forAll ||
-                               (!activity.forAll && activity.filialNumber.HasValue && activity.filialNumber.Value == user.filialNumber);
+                ShowError("La actividad ya venció y no está disponible.");
+                return;
+            }
 
-                if (!allowed)
+            var allowed = a.forAll || (!a.forAll && a.filialNumber.HasValue && a.filialNumber.Value == user.filialNumber);
+            if (!allowed)
+            {
+                ShowError("No tienes permiso para ver esta actividad.");
+                return;
+            }
+
+            badgeType.InnerText =
+                a.activityType == ActivityType.Reunion ? "Reunión" :
+                a.activityType == ActivityType.Social ? "Actividad social" : "Recordatorio";
+
+            lblAudience.InnerText = a.forAll
+                ? "Destinatarios: Todos"
+                : "Destinatarios: Filial " + (a.filialNumber.HasValue ? a.filialNumber.Value.ToString() : "");
+
+            lblTitle.InnerText = a.title ?? "";
+            lblDates.InnerText = $"Publicación: {a.publishStart:yyyy-MM-dd HH:mm} → {a.publishEnd:yyyy-MM-dd HH:mm}";
+
+            pnlMeeting.Visible = false;
+            pnlSocial.Visible = false;
+            pnlReminder.Visible = false;
+
+            if (a.activityType == ActivityType.Reunion)
+            {
+                pnlMeeting.Visible = true;
+
+                if (!string.IsNullOrWhiteSpace(a.meetingUrl))
                 {
-                    ShowError("No autorizado para ver esta actividad.");
-                    return;
+                    lnkMeeting.NavigateUrl = a.meetingUrl;
+                    lnkMeeting.Text = a.meetingUrl;
                 }
+                else
+                {
+                    lnkMeeting.NavigateUrl = "";
+                    lnkMeeting.Text = "No disponible";
+                }
+
+                litAgenda.Text = ToSafeHtml(a.meetingAgenda);
+            }
+            else if (a.activityType == ActivityType.Social)
+            {
+                pnlSocial.Visible = true;
+
+                lblPlace.Text = a.place ?? "";
+                lblEventDate.Text = a.eventDate.HasValue ? a.eventDate.Value.ToString("yyyy-MM-dd") : "";
+                litRequirements.Text = ToSafeHtml(a.requirements);
+            }
+            else 
+            {
+                pnlReminder.Visible = true;
+                litReminder.Text = ToSafeHtml(a.reminderText);
             }
 
             pnlDetail.Visible = true;
-            badgeType.InnerText = activity.activityType.ToString();
-            lblTitle.InnerText = activity.title;
-            lblDates.InnerText = $"Publicación: {activity.publishStart:yyyy-MM-dd HH:mm} → {activity.publishEnd:yyyy-MM-dd HH:mm}";
-            lblAudience.InnerText = activity.forAll ? "Destinatarios: Todos" : $"Destinatarios: Filial {activity.filialNumber}";
-
-            pnlMeeting.Visible = activity.activityType == ActivityType.Reunion;
-            pnlSocial.Visible = activity.activityType == ActivityType.Social;
-            pnlReminder.Visible = activity.activityType == ActivityType.Recordatorio;
-
-            if (pnlMeeting.Visible)
-            {
-                lnkMeeting.Text = activity.meetingUrl;
-                lnkMeeting.NavigateUrl = activity.meetingUrl;
-                litAgenda.Text = Server.HtmlEncode(activity.meetingAgenda).Replace("\n", "<br/>");
-            }
-
-            if (pnlSocial.Visible)
-            {
-                lblPlace.Text = activity.place;
-                lblEventDate.Text = activity.eventDate.HasValue ? activity.eventDate.Value.ToString("yyyy-MM-dd") : "";
-                litRequirements.Text = Server.HtmlEncode(activity.requirements).Replace("\n", "<br/>");
-            }
-
-            if (pnlReminder.Visible)
-            {
-                litReminder.Text = Server.HtmlEncode(activity.reminderText).Replace("\n", "<br/>");
-            }
         }
 
         private void ShowError(string msg)
         {
             pnlError.Visible = true;
             lblError.Text = msg;
-            pnlDetail.Visible = false;
+        }
+
+       
+        private string ToSafeHtml(string text)
+        {
+            var safe = HttpUtility.HtmlEncode(text ?? "");
+            return safe.Replace("\r\n", "<br/>").Replace("\n", "<br/>");
         }
     }
 }
