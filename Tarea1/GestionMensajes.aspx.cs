@@ -26,9 +26,7 @@ namespace Tarea1
 
             if (!IsPostBack)
             {
-                InitDefaults();
-                TogglePanels();
-                ToggleFilial();
+                ResetToNew(runClientScripts: false);
                 BindGrid();
             }
         }
@@ -36,20 +34,27 @@ namespace Tarea1
         protected void ddlActivityType_SelectedIndexChanged(object sender, EventArgs e)
         {
             pnlMsg.Visible = false;
+
             TogglePanels();
             upForm.Update();
+
+            RunClientResetScripts();
         }
 
         protected void ddlAudience_SelectedIndexChanged(object sender, EventArgs e)
         {
             pnlMsg.Visible = false;
+
             ToggleFilial();
             upForm.Update();
+
+            RunClientResetScripts();
         }
 
         protected void ddlTypeFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
             pnlMsg.Visible = false;
+
             BindGrid();
             upGrid.Update();
         }
@@ -57,17 +62,12 @@ namespace Tarea1
         protected void btnReset_Click(object sender, EventArgs e)
         {
             pnlMsg.Visible = false;
-            ClearForm();
-            InitDefaults();
-            TogglePanels();
-            ToggleFilial();
-            upForm.Update();
+            ResetToNew(runClientScripts: true);
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
             pnlMsg.Visible = false;
-
             DataStore.EnsureSeed();
 
             var now = DateTime.Now;
@@ -135,7 +135,7 @@ namespace Tarea1
             var meetingAgenda = (txtMeetingAgenda.Text ?? "").Trim();
 
             var place = (txtPlace.Text ?? "").Trim();
-            var eventDateRaw = (txtEventDate.Text ?? "").Trim(); 
+            var eventDateRaw = (txtEventDate.Text ?? "").Trim();
             var requirements = (txtRequirements.Text ?? "").Trim();
 
             var reminderText = (txtReminderText.Text ?? "").Trim();
@@ -174,7 +174,7 @@ namespace Tarea1
                     return;
                 }
             }
-            else 
+            else
             {
                 if (string.IsNullOrWhiteSpace(reminderText))
                 {
@@ -208,13 +208,12 @@ namespace Tarea1
 
             DataStore.UpsertActivity(activity);
 
-            hfActivityId.Value = activity.activityId;
-
             ShowOk(existing == null ? "Actividad creada." : "Actividad actualizada.");
 
+            
             BindGrid();
             upGrid.Update();
-            upForm.Update();
+            ResetToNew(runClientScripts: true);
         }
 
         protected void gvActivities_RowCommand(object sender, System.Web.UI.WebControls.GridViewCommandEventArgs e)
@@ -244,7 +243,9 @@ namespace Tarea1
                 FillForm(a);
                 TogglePanels();
                 ToggleFilial();
+
                 upForm.Update();
+                RunClientResetScripts();
                 return;
             }
 
@@ -257,7 +258,16 @@ namespace Tarea1
 
                 BindGrid();
                 upGrid.Update();
-                upForm.Update();
+
+                if (string.Equals((hfActivityId.Value ?? "").Trim(), activityId, StringComparison.OrdinalIgnoreCase))
+                {
+                    ResetToNew(runClientScripts: true);
+                }
+                else
+                {
+                    upForm.Update();
+                    RunClientResetScripts();
+                }
             }
         }
 
@@ -298,7 +308,7 @@ namespace Tarea1
             if (!isFilial) txtFilialNumber.Text = "";
         }
 
-        private void InitDefaults()
+        private void InitDefaultsIfEmpty()
         {
             if (string.IsNullOrWhiteSpace(txtPublishStart.Text) || string.IsNullOrWhiteSpace(txtPublishEnd.Text))
             {
@@ -327,6 +337,19 @@ namespace Tarea1
             txtRequirements.Text = "";
 
             txtReminderText.Text = "";
+        }
+
+        private void ResetToNew(bool runClientScripts)
+        {
+            ClearForm();
+            InitDefaultsIfEmpty();
+            TogglePanels();
+            ToggleFilial();
+
+            upForm.Update();
+
+            if (runClientScripts)
+                RunClientResetScripts();
         }
 
         private void FillForm(Activity a)
@@ -374,6 +397,12 @@ namespace Tarea1
             pnlMsg.Visible = true;
             pnlMsg.CssClass = "msg msg-ok";
             lblMsg.Text = msg;
+        }
+
+        private void RunClientResetScripts()
+        {
+            ScriptManager.RegisterStartupScript(this, GetType(), "clientReset_" + Guid.NewGuid().ToString("N"),
+                "if(window.clearClientMsg) clearClientMsg(); if(window.initAdminForm) initAdminForm();", true);
         }
     }
 }

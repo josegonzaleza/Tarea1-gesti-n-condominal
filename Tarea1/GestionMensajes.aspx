@@ -12,7 +12,7 @@
       <ContentTemplate>
 
         <asp:HiddenField ID="hfActivityId" runat="server" />
-
+>
         <asp:Panel ID="pnlMsg" runat="server" CssClass="msg" Visible="false">
           <asp:Label ID="lblMsg" runat="server" />
         </asp:Panel>
@@ -92,6 +92,7 @@
           </div>
         </asp:Panel>
 
+        <!-- Panel Recordatorio -->
         <asp:Panel ID="pnlReminder" runat="server" CssClass="card" Style="margin-top:12px;" Visible="false">
           <div class="h2">Campos de recordatorio</div>
           <div class="field">
@@ -125,7 +126,8 @@
 
       <div class="field" style="min-width:240px;">
         <label>Filtro tipo</label>
-        <asp:DropDownList ID="ddlTypeFilter" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ddlTypeFilter_SelectedIndexChanged">
+        <asp:DropDownList ID="ddlTypeFilter" runat="server" AutoPostBack="true"
+            OnSelectedIndexChanged="ddlTypeFilter_SelectedIndexChanged">
           <asp:ListItem Value="0">Todos</asp:ListItem>
           <asp:ListItem Value="1">Reunión</asp:ListItem>
           <asp:ListItem Value="2">Actividad social</asp:ListItem>
@@ -165,21 +167,31 @@
   </div>
 
   <script>
-      (function () {
-          function isEmpty(v) { return !v || String(v).trim() === ""; }
-          function toInt(v) { var n = parseInt(v, 10); return isNaN(n) ? null : n; }
-          function isValidUrl(u) {
-              if (isEmpty(u)) return true;
-              try { var x = new URL(u); return x.protocol === "http:" || x.protocol === "https:"; }
-              catch (e) { return false; }
-          }
 
-          var typeEl = document.getElementById("<%= ddlActivityType.ClientID %>");
-        var titleEl = document.getElementById("<%= txtTitle.ClientID %>");
-        var audEl = document.getElementById("<%= ddlAudience.ClientID %>");
-        var filialEl = document.getElementById("<%= txtFilialNumber.ClientID %>");
-        var psEl = document.getElementById("<%= txtPublishStart.ClientID %>");
-        var peEl = document.getElementById("<%= txtPublishEnd.ClientID %>");
+    function clearClientMsg() {
+      var msgEl = document.getElementById("clientMsg");
+      if (!msgEl) return;
+      msgEl.style.display = "none";
+      msgEl.textContent = "";
+      msgEl.className = "msg msg-error";
+    }
+
+    function initAdminForm() {
+
+      function isEmpty(v) { return v === null || v === undefined || String(v).trim() === ""; }
+      function toInt(v) { var n = parseInt(v, 10); return isNaN(n) ? null : n; }
+      function isValidUrl(u) {
+        if (isEmpty(u)) return true;
+        try { var x = new URL(u); return x.protocol === "http:" || x.protocol === "https:"; }
+        catch (e) { return false; }
+      }
+
+      var typeEl = document.getElementById("<%= ddlActivityType.ClientID %>");
+      var titleEl = document.getElementById("<%= txtTitle.ClientID %>");
+      var audEl = document.getElementById("<%= ddlAudience.ClientID %>");
+      var filialEl = document.getElementById("<%= txtFilialNumber.ClientID %>");
+      var psEl = document.getElementById("<%= txtPublishStart.ClientID %>");
+      var peEl = document.getElementById("<%= txtPublishEnd.ClientID %>");
       var btnEl = document.getElementById("<%= btnSave.ClientID %>");
       var msgEl = document.getElementById("clientMsg");
 
@@ -192,63 +204,82 @@
 
       var remEl = document.getElementById("<%= txtReminderText.ClientID %>");
 
-          function show(msg) {
-              if (!msg) { msgEl.style.display = "none"; msgEl.textContent = ""; }
-              else { msgEl.style.display = "block"; msgEl.textContent = msg; }
+      if (!typeEl || !titleEl || !audEl || !filialEl || !psEl || !peEl || !btnEl || !msgEl) return;
+
+      function show(msg) {
+        if (!msg) { msgEl.style.display = "none"; msgEl.textContent = ""; }
+        else { msgEl.style.display = "block"; msgEl.textContent = msg; }
+      }
+
+      function validate(showMsg) {
+        var t = typeEl.value;
+        var title = titleEl.value;
+        var aud = audEl.value;
+        var filial = filialEl.value;
+        var ps = psEl.value;
+        var pe = peEl.value;
+
+        var msg = "";
+
+        if (isEmpty(title)) msg = "Título requerido.";
+        else if (isEmpty(ps) || isEmpty(pe)) msg = "Fechas de publicación requeridas.";
+        else if (ps >= pe) msg = "La fecha de inicio debe ser menor que la fecha de fin.";
+        else if (aud === "filial") {
+          var f = toInt(filial);
+          if (f === null || f < 0) msg = "Filial requerida (número válido) si seleccionas 'Por filial'.";
+        }
+
+        if (!msg) {
+          if (t === "1") {
+            if (!isValidUrl(meetUrlEl.value)) msg = "URL de reunión inválida (http/https).";
+            else if (isEmpty(meetAgEl.value)) msg = "Agenda requerida para reunión.";
+          } else if (t === "2") {
+            if (isEmpty(placeEl.value)) msg = "Lugar requerido para actividad social.";
+            else if (isEmpty(eventDateEl.value)) msg = "Fecha del evento requerida para actividad social.";
+            else if (isEmpty(reqEl.value)) msg = "Requisitos requeridos para actividad social.";
+          } else {
+            if (isEmpty(remEl.value)) msg = "Texto requerido para recordatorio.";
           }
+        }
 
-          function validate(showMsg) {
-              var t = typeEl.value;
-              var title = titleEl.value;
-              var aud = audEl.value;
-              var filial = filialEl.value;
-              var ps = psEl.value;
-              var pe = peEl.value;
+        btnEl.disabled = !!msg;
+        if (showMsg) show(msg);
+        else if (!msg) show("");
 
-              var msg = "";
+        return !msg;
+      }
 
-              if (isEmpty(title)) msg = "Título requerido.";
-              else if (isEmpty(ps) || isEmpty(pe)) msg = "Fechas de publicación requeridas.";
-              else if (ps >= pe) msg = "La fecha de inicio debe ser menor que la fecha de fin.";
-              else if (aud === "filial") {
-                  var f = toInt(filial);
-                  if (f === null || f < 0) msg = "Filial requerida (número válido) si seleccionas 'Por filial'.";
-              }
+      if (!btnEl.dataset) btnEl.dataset = {};
+      if (btnEl.dataset.bound !== "1") {
 
-              if (!msg) {
-                  if (t === "1") {
-                      if (!isValidUrl(meetUrlEl.value)) msg = "URL de reunión inválida (http/https).";
-                      else if (isEmpty(meetAgEl.value)) msg = "Agenda requerida para reunión.";
-                  } else if (t === "2") {
-                      if (isEmpty(placeEl.value)) msg = "Lugar requerido para actividad social.";
-                      else if (isEmpty(eventDateEl.value)) msg = "Fecha del evento requerida para actividad social.";
-                      else if (isEmpty(reqEl.value)) msg = "Requisitos requeridos para actividad social.";
-                  } else {
-                      if (isEmpty(remEl.value)) msg = "Texto requerido para recordatorio.";
-                  }
-              }
+        var onAnyInput = function () { validate(true); };
+        document.addEventListener("input", onAnyInput, true);
+        document.addEventListener("change", onAnyInput, true);
 
-              btnEl.disabled = !!msg;
-              if (showMsg) show(msg);
-              else if (!msg) show("");
-
-              return !msg;
+        btnEl.addEventListener("click", function (e) {
+          if (!validate(true)) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
           }
+          return true;
+        });
 
-          document.addEventListener("input", function () { validate(true); }, true);
-          document.addEventListener("change", function () { validate(true); }, true);
+        btnEl.dataset.bound = "1";
+      }
 
-          btnEl.addEventListener("click", function (e) {
-              if (!validate(true)) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  return false;
-              }
-              return true;
-          });
+      validate(false);
+    }
 
-          validate(false);
-      })();
+    document.addEventListener("DOMContentLoaded", function () {
+      initAdminForm();
+    });
+
+    if (window.Sys && Sys.WebForms && Sys.WebForms.PageRequestManager) {
+      Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
+        initAdminForm();
+      });
+    }
   </script>
 
 </asp:Content>
