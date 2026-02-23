@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Script.Services;
-using System.Web.Services;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 using Tarea1.AppCode;
 using static Tarea1.AppCode.Models;
 
@@ -18,52 +13,73 @@ namespace Tarea1
             DataStore.EnsureSeed();
 
             var user = Session["currentUser"] as User;
-            if (user == null)
-            {
-                Response.Redirect("~/Login.aspx");
-                return;
-            }
-            if (user.role != UserRole.Condominio)
-            {
-                Response.Redirect("~/Principal.aspx");
-                return;
-            }
+            if (user == null) { Response.Redirect("~/Login.aspx"); return; }
+            if (user.role != UserRole.Condominio) { Response.Redirect("~/Principal.aspx"); return; }
 
-            lblInfo.Text = $"Usuario: {user.firstName} {user.lastName} | Filial: {user.filialNumber}";
+            if (!IsPostBack)
+            {
+                lblInfo.Text = $"Mostrando actividades disponibles para la filial: {user.filialNumber}";
+                BindGrid();
+            }
         }
 
-        [WebMethod]
-        [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-        public static ApiResponse UserGetBoard(int typeFilter)
+        protected void ddlTypeFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DataStore.EnsureSeed();
+            pnlMsg.Visible = false;
+            BindGrid();
+            upBoard.Update();
+        }
 
-            // obtener usuario de sesión
-            var user = HttpContext.Current.Session["currentUser"] as User;
-            if (user == null) return ApiResponse.Fail("Sesión expirada. Vuelve a iniciar sesión.");
+        protected void tmRefresh_Tick(object sender, EventArgs e)
+        {
+            pnlMsg.Visible = false;
+            BindGrid();
+            upBoard.Update();
+        }
 
+        private void BindGrid()
+        {
+            var user = Session["currentUser"] as User;
+            if (user == null) { Response.Redirect("~/Login.aspx"); return; }
+
+            int filter = int.Parse(ddlTypeFilter.SelectedValue);
+            int? typeFilter = (filter == 0) ? (int?)null : filter;
+
+            var list = DataStore.GetActivitiesForUser(user, typeFilter);
             var now = DateTime.Now;
 
-            var list = DataStore.GetActivitiesForUser(user, typeFilter == 0 ? (int?)null : typeFilter)
+            var data = list
+                .OrderBy(a => a.publishStart)
                 .Select(a => new
                 {
                     a.activityId,
-                    activityType = (int)a.activityType,
-                    a.title,
-                    publishStart = a.publishStart.ToString("yyyy-MM-dd HH:mm"),
-                    publishEnd = a.publishEnd.ToString("yyyy-MM-dd HH:mm"),
-                    status = GetStatus(now, a.publishStart, a.publishEnd)
+                    title = a.title,
+                    typeText =
+                        a.activityType == ActivityType.Reunion ? "Reunión" :
+                        a.activityType == ActivityType.Social ? "Actividad social" : "Recordatorio",
+                    publishRange = $"{a.publishStart:yyyy-MM-dd HH:mm} → {a.publishEnd:yyyy-MM-dd HH:mm}",
+                    status = GetStatus(a, now)
                 })
                 .ToList();
 
-            return ApiResponse.Ok("OK", list);
+            gvBoard.DataSource = data;
+            gvBoard.DataBind();
+
+            pnlMsg.Visible = false;
         }
 
-        private static string GetStatus(DateTime now, DateTime start, DateTime end)
+        private string GetStatus(Activity a, DateTime now)
         {
-            if (now < start) return "Próxima";
-            if (now >= start && now <= end) return "En curso";
+            if (now < a.publishStart) return "Próxima";
+            if (now >= a.publishStart && now <= a.publishEnd) return "En curso";
             return "Finalizada";
+        }
+
+        private void ShowError(string msg)
+        {
+            pnlMsg.Visible = true;
+            pnlMsg.CssClass = "msg msg-error";
+            lblMsg.Text = msg;
         }
     }
 }

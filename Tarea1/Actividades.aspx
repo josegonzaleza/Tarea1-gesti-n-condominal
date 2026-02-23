@@ -1,4 +1,6 @@
-﻿<%@ Page Title="Actividades" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Actividades.aspx.cs" Inherits="Tarea1.Actividades" %>
+﻿<%@ Page Title="Actividades" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"
+    CodeBehind="Actividades.aspx.cs" Inherits="Tarea1.Actividades" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
   <div class="card">
@@ -8,79 +10,77 @@
     <div class="row" style="margin-top:10px; justify-content:space-between;">
       <div class="field" style="min-width:240px;">
         <label>Filtro tipo</label>
-        <select id="typeFilter">
-          <option value="0">Todos</option>
-          <option value="1">Reunión</option>
-          <option value="2">Actividad social</option>
-          <option value="3">Recordatorio</option>
-        </select>
+        <asp:DropDownList ID="ddlTypeFilter" runat="server" AutoPostBack="true"
+            OnSelectedIndexChanged="ddlTypeFilter_SelectedIndexChanged">
+          <asp:ListItem Value="0">Todos</asp:ListItem>
+          <asp:ListItem Value="1">Reunión</asp:ListItem>
+          <asp:ListItem Value="2">Actividad social</asp:ListItem>
+          <asp:ListItem Value="3">Recordatorio</asp:ListItem>
+        </asp:DropDownList>
       </div>
-
     </div>
 
-    <div id="msgUser" class="msg" style="display:none;"></div>
+    <div id="clientMsg" class="msg msg-error" style="display:none;"></div>
 
-    <table class="table" id="tblUserActivities">
-      <thead>
-        <tr>
-          <th>Título</th>
-          <th>Tipo</th>
-          <th>Publicación</th>
-          <th>Estado</th>
-          <th>Detalle</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <asp:UpdatePanel ID="upBoard" runat="server" UpdateMode="Conditional">
+      <ContentTemplate>
+
+        <asp:Panel ID="pnlMsg" runat="server" CssClass="msg" Visible="false" style="margin-top:10px;">
+          <asp:Label ID="lblMsg" runat="server" />
+        </asp:Panel>
+
+        <asp:Timer ID="tmRefresh" runat="server" Interval="10000" OnTick="tmRefresh_Tick" />
+
+        <asp:GridView ID="gvBoard" runat="server" CssClass="table" AutoGenerateColumns="false">
+          <Columns>
+            <asp:TemplateField HeaderText="Título">
+              <ItemTemplate>
+                <a class="link" href='ActividadDetalle.aspx?id=<%# Eval("activityId") %>'>
+                  <%# Eval("title") %>
+                </a>
+              </ItemTemplate>
+            </asp:TemplateField>
+
+            <asp:BoundField HeaderText="Tipo" DataField="typeText" />
+            <asp:BoundField HeaderText="Publicación" DataField="publishRange" />
+            <asp:BoundField HeaderText="Estado" DataField="status" />
+
+            <asp:TemplateField HeaderText="Detalle">
+              <ItemTemplate>
+                <a class="link" href='ActividadDetalle.aspx?id=<%# Eval("activityId") %>'>Ver</a>
+              </ItemTemplate>
+            </asp:TemplateField>
+          </Columns>
+        </asp:GridView>
+
+      </ContentTemplate>
+
+      <Triggers>
+        <asp:AsyncPostBackTrigger ControlID="ddlTypeFilter" EventName="SelectedIndexChanged" />
+        <asp:AsyncPostBackTrigger ControlID="tmRefresh" EventName="Tick" />
+      </Triggers>
+    </asp:UpdatePanel>
+
   </div>
 
-<script>
-$(function(){
+  <script>
+    (function(){
+      var ddl = document.getElementById("<%= ddlTypeFilter.ClientID %>");
+          var msgEl = document.getElementById("clientMsg");
 
-  function renderType(t){
-    if(t === 1) return "Reunión";
-    if(t === 2) return "Social";
-    return "Recordatorio";
-  }
+          function show(msg) {
+              if (!msg) { msgEl.style.display = "none"; msgEl.textContent = ""; }
+              else { msgEl.style.display = "block"; msgEl.textContent = msg; }
+          }
 
-  function loadBoard(){
-    var filter = parseInt($("#typeFilter").val(), 10);
+          ddl.addEventListener("change", function () {
+              var v = ddl.value;
+              if (v !== "0" && v !== "1" && v !== "2" && v !== "3") show("Filtro inválido.");
+              else show("");
+          });
 
-    PageMethods.UserGetBoard(filter, function(r){
-      if(!r || !r.ok){
-        setMessage("msgUser", (r && r.message) ? r.message : "Error al cargar actividades.", false);
-        return;
-      }
-      clearMessage("msgUser");
-
-      var list = r.data || [];
-      var $tbody = $("#tblUserActivities tbody");
-      $tbody.empty();
-
-      list.forEach(function(a){
-        var tr = $("<tr/>");
-        var link = $('<a class="link"/>').attr("href", "ActividadDetalle.aspx?id=" + encodeURIComponent(a.activityId)).text(a.title);
-
-        tr.append($("<td/>").append(link));
-        tr.append($("<td/>").html('<span class="badge">'+renderType(a.activityType)+'</span>'));
-        tr.append($("<td/>").text(a.publishStart + " → " + a.publishEnd));
-        tr.append($("<td/>").text(a.status));
-        tr.append($("<td/>").html('<a class="link" href="ActividadDetalle.aspx?id='+encodeURIComponent(a.activityId)+'">Ver</a>'));
-
-        $tbody.append(tr);
-      });
-    }, function(err){
-      setMessage("msgUser", "Error Ajax UserGetBoard: " + (err && err.get_message ? err.get_message() : "Comunicación"), false);
-      console && console.log(err);
-    });
-  }
-
-  $("#typeFilter").on("change", loadBoard);
-
-  // inicializacion
-  loadBoard();
-  setInterval(loadBoard, 10000);
-});
-</script>
+          show("");
+      })();
+  </script>
 
 </asp:Content>
